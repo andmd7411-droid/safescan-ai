@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SafeScan AI v3.0 - OFFICIAL</title>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+    <div id="app-container">
+        <!-- Camera Feed Simulation -->
+        <video id="camera-feed" autoplay playsinline muted></video>
+        <canvas id="ocr-canvas" style="display:none;"></canvas>
+
+        <div id="reticle">
+            <div class="corner topleft"></div>
+            <div class="corner topright"></div>
+            <div class="corner bottomleft"></div>
+            <div class="corner bottomright"></div>
+            <span id="scanning-text">SafeScan v3.0 Ready</span>
+        </div>
+
+        <div id="ar-bubble" class="hidden">
+            <div class="bubble-header">
+                <span id="risk-icon">⚠️</span>
+                <h3 id="risk-title">Ingredient Name</h3>
+            </div>
+            <p id="risk-desc">Description of the risk goes here.</p>
+        </div>
+
+        <div id="hud-top">
+            <div class="score-pill">
+                <span>🧺 Score: </span><span id="session-score">100</span>
+            </div>
+            <div
+                style="position:absolute; top:10px; right:10px; color:#0f0; font-weight:bold; font-size:12px; background:rgba(0,0,0,0.5); padding:2px 5px; border-radius:4px;">
+                VERSION v3.0 (ROBUST)</div>
+            <button id="btn-reset-cache"
+                style="position:absolute; top:40px; right:10px; font-size:10px; padding:4px 8px; background:rgba(231, 76, 60, 0.3); color:white; border:1px solid rgba(255,255,255,0.2);">RESET
+                APP (FIX CACHE)</button>
+        </div>
+
+        <input type="file" id="file-input" accept="image/*" capture="environment" style="display:none;">
+
+        <div id="camera-error" class="hidden"
+            style="position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); text-align:center; width:80%; color:white;">
+            <p style="font-size:1.2em; margin-bottom:20px;">Live Camera Unavailable (HTTP)</p>
+            <p>Please use the <b>PHOTO</b> button below to scan.</p>
+        </div>
+
+        <div id="hud-bottom">
+            <button id="btn-profile">👤 Profile</button>
+            <button id="btn-scan" class="primary-action">SCAN</button>
+            <button id="btn-upload" class="primary-action hidden">📷 PHOTO</button>
+            <button id="btn-history">🕒 History</button>
+        </div>
+
+        <!-- Modals -->
+        <div id="profile-modal" class="modal-overlay hidden">
+            <div class="modal-content glass">
+                <h2>👤 Profile & Allergies</h2>
+                <div class="restriction-list">
+                    <label class="toggle-item"><span>Gluten Free</span><input type="checkbox" id="pref-gluten"></label>
+                    <label class="toggle-item"><span>Lactose Free</span><input type="checkbox"
+                            id="pref-lactose"></label>
+                    <label class="toggle-item"><span>No Peanuts</span><input type="checkbox" id="pref-peanuts"></label>
+                    <label class="toggle-item"><span>No Pork (Gelatin)</span><input type="checkbox"
+                            id="pref-pork"></label>
+                    <label class="toggle-item"><span>No Added Sugar</span><input type="checkbox"
+                            id="pref-sugar"></label>
+                </div>
+                <button id="btn-save-profile" class="primary-action" style="width:100%; margin-top:20px;">SAVE
+                    SETTINGS</button>
+                <button id="btn-close-profile" class="btn-secondary"
+                    style="width:100%; margin-top:10px;">CANCEL</button>
+            </div>
+        </div>
+
+        <div id="history-modal" class="modal-overlay hidden">
+            <div class="modal-content glass">
+                <h2>📜 Scan History</h2>
+                <div id="history-list" style="max-height: 300px; overflow-y: auto; text-align: left; margin: 20px 0;">
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button id="btn-clear-history" class="btn-secondary" style="background:#e74c3c; flex:1;">Clear
+                        All</button>
+                    <button id="btn-close-history" class="btn-secondary" style="flex:1;">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+        <script src="ingredients_v3.js?v=3.0"></script>
+        <script src="app_v3.js?v=3.0"></script>
+</body>
+
+</html>

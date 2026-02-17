@@ -1,0 +1,285 @@
+:root {
+    --color-safe: #2ecc71;
+    --color-warning: #f1c40f;
+    --color-danger: #e74c3c;
+    --color-dark: #2c3e50;
+    --color-light: #ecf0f1;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.3);
+}
+
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    background-color: #000;
+}
+
+#app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#camera-feed {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 0;
+}
+
+/* Reticle Animation */
+#reticle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+#scanning-text {
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+#reticle.scanning #scanning-text {
+    opacity: 1;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* AR Bubble (Glassmorphism) */
+#ar-bubble {
+    position: absolute;
+    top: 30%;
+    /* Floating above product */
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 80%;
+    max-width: 300px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    z-index: 20;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+#ar-bubble.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, 20px);
+}
+
+.bubble-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+#risk-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+#risk-title {
+    margin: 0;
+    font-size: 18px;
+    color: var(--color-dark);
+}
+
+#risk-desc {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+/* Risk indicators */
+.risk-safe {
+    border-left: 5px solid var(--color-safe) !important;
+}
+
+.risk-warning {
+    border-left: 5px solid var(--color-warning) !important;
+}
+
+.risk-danger {
+    border-left: 5px solid var(--color-danger) !important;
+}
+
+/* HUD */
+#hud-top {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 30;
+}
+
+.score-pill {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+}
+
+#hud-bottom {
+    position: absolute;
+    bottom: 60px;
+    /* Lifted higher for mobile taskbars */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 30;
+    padding: 0 10px;
+}
+
+button {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    color: var(--color-dark);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.primary-action {
+    background: var(--color-safe);
+    color: white;
+    padding: 16px 32px;
+    font-size: 18px;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+}
+
+/* Shared Modal Overlay */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 85%;
+    max-width: 400px;
+    padding: 24px;
+    border-radius: 24px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.restriction-list {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.toggle-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.toggle-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-safe);
+}
+
+#history-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+#history-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+#ar-bubble::-webkit-scrollbar {
+    width: 4px;
+}
+
+#ar-bubble::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.text-red {
+    color: var(--color-danger);
+}
+
+.text-yellow {
+    color: var(--color-warning);
+}
+
+.text-green {
+    color: var(--color-safe);
+}
